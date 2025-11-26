@@ -6,6 +6,11 @@
   # Functions directory for Netlify serverless functions
   functions = "netlify/functions"
 
+[functions]
+  # Include data directory with functions
+  included_files = ["data/**"]
+  node_bundler = "esbuild"
+
 # Don't redirect API calls to index.html
 [[redirects]]
   from = "/api/*"
