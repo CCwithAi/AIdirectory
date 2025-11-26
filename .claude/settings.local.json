@@ -9,7 +9,13 @@
       "Bash(npx vite:*)",
       "Bash(git init:*)",
       "Bash(.gitignore)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(start https://github.com/CCwithAi/AIdirectory)",
+      "Bash(start https://app.netlify.com/sites/ai-services-manchester/settings/deploys)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
