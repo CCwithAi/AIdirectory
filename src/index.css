@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; 
+    background-color: #f3f4f6; /* Default bg-gray-100 from original file */
+}
+
+/* Custom scrollbar styles from original file */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+/* Tailwind prose overrides from original file */
+.prose strong { color: inherit; }
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { color: inherit; }
+
+/* Sticky classes from original file */
+.sticky-navbar {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.sticky-search {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 70px; /* Adjust based on navbar height */
+    z-index: 40; 
+}
+
+#root {
+    min-height: 100vh;
+} 

@@ -1,0 +1,19 @@
+[build]
+  # Build command for Vite production build
+  command = "npm run build"
+  # The publish directory is dist/ where Vite outputs the build
+  publish = "dist"
+  # Functions directory for Netlify serverless functions
+  functions = "netlify/functions"
+
+# Don't redirect API calls to index.html
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Redirect all other routes to index.html for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 
