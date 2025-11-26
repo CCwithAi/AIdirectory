@@ -1,7 +1,6 @@
 [build]
-  # Build command for Vite production build
-  # Copy data file to functions directory before build
-  command = "mkdir -p netlify/functions/data && cp data/agencies.json netlify/functions/data/ && npm run build"
+  # Build command: Build with Vite and copy data folder to dist
+  command = "npm run build && mkdir -p dist/data && cp data/agencies.json dist/data/"
   # The publish directory is dist/ where Vite outputs the build
   publish = "dist"
   # Functions directory for Netlify serverless functions

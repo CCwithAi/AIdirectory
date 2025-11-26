@@ -1,40 +1,21 @@
-const fs = require('fs');
-const path = require('path');
+const https = require('https');
 
 exports.handler = async (event, context) => {
   // Only allow GET requests
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 405,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
       body: JSON.stringify({ error: 'Method Not Allowed' }),
     };
   }
 
   try {
-    // Read agencies from JSON file - look in function's data directory first
-    const agenciesPath = path.join(__dirname, 'data', 'agencies.json');
-
-    if (!fs.existsSync(agenciesPath)) {
-      console.error('agencies.json not found at:', agenciesPath);
-      console.error('__dirname:', __dirname);
-      console.error('Files in __dirname:', fs.readdirSync(__dirname));
-
-      return {
-        statusCode: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({
-          success: false,
-          error: 'Data file not found',
-          path: agenciesPath,
-        }),
-      };
-    }
-
-    const agenciesData = fs.readFileSync(agenciesPath, 'utf8');
-    const agencies = JSON.parse(agenciesData);
+    // Fetch agencies data from the published data file
+    const agencies = await fetchAgenciesFromSite();
 
     return {
       statusCode: 200,
@@ -49,13 +30,49 @@ exports.handler = async (event, context) => {
       }),
     };
   } catch (error) {
-    console.error('Error reading agencies:', error);
+    console.error('Error fetching agencies:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
       body: JSON.stringify({
         success: false,
         error: 'Failed to fetch agencies',
+        message: error.message,
       }),
     };
   }
 };
+
+/**
+ * Fetch agencies from the published site
+ * This works because the data folder is deployed with the static site
+ */
+function fetchAgenciesFromSite() {
+  return new Promise((resolve, reject) => {
+    // Determine the site URL from the request or use the production URL
+    const siteUrl = process.env.URL || 'https://aiservicesmanchester.co.uk';
+    const dataUrl = `${siteUrl}/data/agencies.json`;
+
+    https.get(dataUrl, (res) => {
+      let data = '';
+
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      res.on('end', () => {
+        try {
+          const agencies = JSON.parse(data);
+          resolve(agencies);
+        } catch (error) {
+          reject(new Error(`Failed to parse agencies data: ${error.message}`));
+        }
+      });
+    }).on('error', (error) => {
+      reject(new Error(`Failed to fetch agencies: ${error.message}`));
+    });
+  });
+}

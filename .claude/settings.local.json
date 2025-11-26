@@ -15,7 +15,9 @@
       "Bash(git push:*)",
       "Bash(start https://github.com/CCwithAi/AIdirectory)",
       "Bash(start https://app.netlify.com/sites/ai-services-manchester/settings/deploys)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__MCP_DOCKER__get_domain_llms_txt_as_docs",
+      "mcp__MCP_DOCKER__mcp-find"
     ],
     "deny": [],
     "ask": []
