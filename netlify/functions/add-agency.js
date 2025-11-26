@@ -78,7 +78,37 @@ exports.handler = async (event, context) => {
     }
 
     // Read current agencies
-    const agenciesPath = path.join(__dirname, '..', '..', 'data', 'agencies.json');
+    // Try multiple possible paths for Netlify deployment
+    let agenciesPath;
+    const possiblePaths = [
+      path.join(__dirname, '..', '..', 'data', 'agencies.json'),
+      path.join(process.cwd(), 'data', 'agencies.json'),
+      path.join(__dirname, 'data', 'agencies.json'),
+      '/opt/build/repo/data/agencies.json',
+    ];
+
+    for (const tryPath of possiblePaths) {
+      if (fs.existsSync(tryPath)) {
+        agenciesPath = tryPath;
+        break;
+      }
+    }
+
+    if (!agenciesPath) {
+      console.error('Could not find agencies.json');
+      return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({
+          success: false,
+          error: 'Data file not found',
+        }),
+      };
+    }
+
     const agenciesData = fs.readFileSync(agenciesPath, 'utf8');
     const agencies = JSON.parse(agenciesData);
 
