@@ -78,10 +78,26 @@ exports.handler = async (event, context) => {
     }
 
     // Read current agencies from function's data directory
-    const agenciesPath = path.join(__dirname, 'data', 'agencies.json');
+    // When deployed, included_files puts data/agencies.json relative to the function file
+    // But in some environments it might be at the root or elsewhere.
+    // We'll try a few common paths.
+    
+    let agenciesPath;
+    const possiblePaths = [
+      path.join(__dirname, 'data', 'agencies.json'),           // Local dev / some deployments
+      path.join(process.cwd(), 'data', 'agencies.json'),       // Root relative
+      path.resolve(__dirname, '../../data/agencies.json')      // Relative to source structure
+    ];
 
-    if (!fs.existsSync(agenciesPath)) {
-      console.error('agencies.json not found at:', agenciesPath);
+    for (const p of possiblePaths) {
+      if (fs.existsSync(p)) {
+        agenciesPath = p;
+        break;
+      }
+    }
+
+    if (!agenciesPath) {
+      console.error('agencies.json not found. Checked:', possiblePaths);
       return {
         statusCode: 500,
         headers: {

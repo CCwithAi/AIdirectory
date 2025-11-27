@@ -6,6 +6,9 @@
   # Functions directory for Netlify serverless functions
   functions = "netlify/functions"
 
+[functions]
+  included_files = ["data/agencies.json"]
+
 # Don't redirect API calls to index.html
 [[redirects]]
   from = "/api/*"
