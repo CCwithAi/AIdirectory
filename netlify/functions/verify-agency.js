@@ -206,7 +206,7 @@ Respond in JSON format:
 async function callGroqAPI(apiKey, prompt) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
-      model: 'llama-3.2-3b-preview', // 3B parameter model, fast and efficient
+      model: 'openai/gpt-oss-20b',
       messages: [
         {
           role: 'system',
@@ -217,8 +217,10 @@ async function callGroqAPI(apiKey, prompt) {
           content: prompt,
         },
       ],
-      temperature: 0.1, // Low temperature for consistent verification
-      max_tokens: 500,
+      temperature: 0.1,
+      max_completion_tokens: 8192,
+      top_p: 1,
+      reasoning_effort: "medium",
       response_format: { type: 'json_object' }, // Ensure JSON response
     });
 
